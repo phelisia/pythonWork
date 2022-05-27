@@ -26,6 +26,10 @@ class Student:
     def fullname(self):
         full= self.firstname + self.lastname
         return full
+
+    def initial(self):
+        initiate=self.firstname[0].split() +self.lastname[0].split()
+        return initiate  
        
     def year(self,current_year):
         birthdate=current_year-self.age
