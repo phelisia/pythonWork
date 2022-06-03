@@ -56,3 +56,8 @@ def sum_and_greet (*args,**kwargs):
 
 
 
+def personal_info(**kwargs):
+    info=kwargs
+    print(info)
+personal_info(name="phelisia",age=20)    
+ 
