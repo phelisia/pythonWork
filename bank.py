@@ -9,6 +9,7 @@ class Account:
         self.withdrawals=[]
         self.transaction=100
         self.newdict={}
+        self.statements=[]
         self.loan_balance=0
         
 
@@ -72,26 +73,37 @@ class Account:
         return f" your balance is {self.balance} on {now}"
     def full_statement(self):
         now=datetime.now()
-        full=[self.deposits+self.withdrawals]
-        for x in full:
-            print(f"{now}{x}")
+        for item in self.statements:
+            self.statements.sort(key=lambda item: item['date'], reverse=True)
+            now=item['amount']
+            amount=item['amount']
+            narration=item['narration']
+            print(f"{now}{narration}{amount}")
     def borrow(self,loan):
-        sum=0
-        for depo in self.deposits:
-            sum+=depo
-            print(sum)
-        if len(self.deposits)<10:
-            return f" you have more than 10 depoist and your loan is{loan}"
-        elif loan>100:
-            return f"you qualify for a loan"
-        elif :
-            pass
-        elif self.loan_balance==0:
-            pass
-
-            
+        total=sum(self.deposits)
+        qualification_amount=total*(1/3)
+        loan+=loan*(30/100)
+        if len(self.deposits) < 10 :
+            return f"Sorry {self.name} you must have more than 10 deposits to get a loan"
+        elif loan <= 100:
+            return f"Sorry {self.name} . Please enter an amount more than 100"
+        elif loan >= qualification_amount:
+            return f"You cannot borrow more than {total//3}"
+        elif self.loan_balance > 0:
+            return f"Dear customer, your outstanding loan balance is {self.loan_balance}"
         else:
-            print("not qualified for a loan")    
+            self.loan_balance +=loan
+            return f"Your loan balance is {self.loan_balance}"
+    def loan_repayment(self,amount):
+        if amount < self.loan_balance:
+            self.loan_balance-=amount
+            return f"You have paid {amount} and you have an outstanding balance is {self.loan_balance}"
+
+        else:
+            self.loan_balance-=amount
+            overpayment=amount-self.loan_balance
+            self.balance+=overpayment
+            return f"You loan is fully paid"          
 
       
 
