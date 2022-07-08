@@ -8,8 +8,6 @@ class Account:
         self.deposits=[]
         self.withdrawals=[]
         self.transaction=100
-        self.newdict={}
-        self.statements=[]
         self.loan_balance=0
         
 
@@ -35,12 +33,10 @@ class Account:
         if amount<=0:
             return f"deposit amount must be greater than 0 {now}"
         else:
-            self.narration=f" hello {self.name} you have deposited {amount} and your new balance is  {self.balance}  {now}"
+            self.narration={ "date":now, "name":self.name, "amount": amount, "balance" :self.balance}
             self.balance+=amount
             self.deposits.append(amount)
-            self.newdict["date"]=now
-            self.newdict["amount"]=amount
-            self.newdict["narration"]=self.narration
+            
             return f" hello {self.name} confirmed you have deposited {amount} and your new balance is {self.balance} on  {now}"
     def withdrawa(self,amount):
         now=datetime.now()
@@ -50,35 +46,28 @@ class Account:
         elif amount<=0:
             return f"amount must be greater than 0"
         else:
-            self.narration=f" hello  {self.name}  confirmed you have withdrawn {amount} your new balance is{self.balance} on{ now}" 
+            self.narration={ "date":now, "name":self.name, "amount": amount, "balance" :self.balance}
             self.balance-=withdrawal_amount
             self.withdrawals.append(amount)
-            self.newdict["date"]=now
-            self.newdict["amount"]=amount
-            self.newdict["narrations"]=self.narration
-
-            
             return f" hello {self.name} you have withdrawn {amount} your new balance is {self.balance} on {now}"     
     def deposits_statement (self):
         now=datetime.now()
         for depo in self.deposits:
-            print(f"You deposited {depo}  {now}")
+            print(f"You deposited {depo} on {now} ")
 
     def withdrawal_statements(self):
          now=datetime.now()
          for witho in self.withdrawals:
-            print(f" you have withdrawn {witho}  on {now}")     
+            print(f" you have withdrawn {witho}")     
     def total_balance(self):
         now=datetime.now()
         return f" your balance is {self.balance} on {now}"
     def full_statement(self):
         now=datetime.now()
-        for item in self.statements:
-            self.statements.sort(key=lambda item: item['date'], reverse=True)
-            now=item['amount']
-            amount=item['amount']
-            narration=item['narration']
-            print(f"{now}{narration}{amount}")
+        statements=self.deposits+self.withdrawals
+        for item in statements:
+            statements.sort(key=lambda item: item['date'], reverse=True)
+            print(f"{item['date']}_______{item['amount']}")
     def borrow(self,loan):
         total=sum(self.deposits)
         qualification_amount=total*(1/3)
@@ -103,7 +92,23 @@ class Account:
             self.loan_balance-=amount
             overpayment=amount-self.loan_balance
             self.balance+=overpayment
-            return f"You loan is fully paid"          
+            self.loan_balance=0
+
+            return f"You loan is fully paid"   
+    def transfer_amount(self,amount,new_account):
+        if amount< 0:
+            return f"Invalid amount"
+        elif amount>=self.balance :
+            return f"insufficient balance"   
+
+        elif isinstance(new_account,Account): 
+            self.balance-=amount
+            new_account.deposit(amount)
+            return f"you have transfered{amount}ksh to the with the name of {new_account.name}your new balance is{self.balance}"
+
+
+
+
 
       
 
